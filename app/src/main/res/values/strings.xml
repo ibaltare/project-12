@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DragonBall</string>
+    <string name="login_title">Dragon Ball</string>
+    <string name="password">Contraseña</string>
+    <string name="email">Email</string>
+    <string name="btn_login">Entrar</string>
+</resources>

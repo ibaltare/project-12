@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_32">32dp</dimen>
+    <dimen name="title_size">30sp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="corner_radius">15dp</dimen>
+</resources>
