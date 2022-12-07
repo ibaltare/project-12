@@ -1,31 +1,35 @@
 package com.keepcoding.navi.dragonball.viewModels
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.keepcoding.navi.dragonball.models.*
 import com.keepcoding.navi.dragonball.utils.Constants
 import com.keepcoding.navi.dragonball.utils.MainActivityState
+import com.keepcoding.navi.dragonball.utils.SharedPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
 
+class HomeViewModel: ViewModel() {
 
-class LoginViewModel : ViewModel() {
-
+    var heroList: List<Hero>? = null
     val stateLiveData : MutableLiveData<MainActivityState> by lazy {
         MutableLiveData<MainActivityState>()
     }
 
-    fun doLogin(user: String, pass: String){
+    fun downloadHeroes(context: Context) {
         setValueOnMainThread(MainActivityState.Loading)
         val client = OkHttpClient()
-        val url = Constants.URL_LOGIN
-        val credentials = Credentials.basic(user,pass)
-        val formBody = FormBody.Builder().build()
+        val url = Constants.URL_HEROES_ALL
+        val token = SharedPreferences.getToken(context)
+        val formBody = FormBody.Builder().add("name","").build()
         val request = Request.Builder()
             .url(url)
-            .addHeader("Authorization", credentials)
+            .addHeader("Authorization", "Bearer $token")
             .post(formBody)
             .build()
         val call = client.newCall(request)
@@ -38,14 +42,23 @@ class LoginViewModel : ViewModel() {
 
                 override fun onResponse(call: Call, response: Response) {
                     if (response.code == 200){
-                        setValueOnMainThread(MainActivityState.Success(response.body?.string()))
+
+                        val heroDtoArray: Array<HeroDto> =
+                            Gson().fromJson(response.body?.string(), Array<HeroDto>::class.java)
+
+                        heroList = heroDtoArray.map {
+                            Hero(it.id, it.photo,it.name,100,100, 0)
+                        }
+
+                        val json = Gson().toJson(heroList)
+                        SharedPreferences.saveHeroes(json,context)
+                        setValueOnMainThread(MainActivityState.Success(null))
                     }else{
-                        setValueOnMainThread(MainActivityState.Error("Usuario no autenticado"))
+                        setValueOnMainThread(MainActivityState.Error("Error al descargar los datos"))
                     }
                 }
             }
         )
-
     }
 
     fun setValueOnMainThread(value: MainActivityState) {
@@ -53,4 +66,5 @@ class LoginViewModel : ViewModel() {
             stateLiveData.value = value
         }
     }
+
 }

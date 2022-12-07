@@ -1,17 +1,15 @@
-package com.keepcoding.navi.dragonball
+package com.keepcoding.navi.dragonball.views
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
-import com.keepcoding.navi.dragonball.models.MainActivityState
+import com.keepcoding.navi.dragonball.utils.MainActivityState
 import com.keepcoding.navi.dragonball.viewModels.LoginViewModel
 import com.keepcoding.navi.dragonball.databinding.ActivityMainBinding
-import com.keepcoding.navi.dragonball.models.Constants
-import com.keepcoding.navi.dragonball.models.SharedPreferences
+import com.keepcoding.navi.dragonball.utils.SharedPreferences
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -55,6 +53,7 @@ class LoginActivity : AppCompatActivity() {
                 is MainActivityState.Success -> {
                     it.message?.let { token ->
                         SharedPreferences.saveToken(token,this@LoginActivity)
+                        HomeActivity.launch(this@LoginActivity)
                     }
                     btnLoginState(true)
                     binding.progressBar.visibility = View.INVISIBLE

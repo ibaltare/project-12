@@ -1,4 +1,4 @@
-package com.keepcoding.navi.dragonball.models
+package com.keepcoding.navi.dragonball.utils
 
 sealed class MainActivityState {
     data class Success(val message: String?) : MainActivityState()
