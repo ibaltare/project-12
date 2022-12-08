@@ -59,12 +59,13 @@
 
     <ImageButton
         android:id="@+id/btnInfo"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="@dimen/margin_32"
+        android:layout_height="@dimen/margin_32"
         app:layout_constraintBottom_toBottomOf="@+id/imgHero"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
+        app:srcCompat="@android:drawable/ic_dialog_info"
+        android:contentDescription="@string/info" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

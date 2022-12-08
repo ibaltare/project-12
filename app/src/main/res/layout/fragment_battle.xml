@@ -1,14 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.BattleFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvBattle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/batalla"
+        android:textSize="@dimen/text_title"
+        android:textStyle="bold"
+        android:textColor="@color/db_blue"
+        android:shadowDy="2"
+        android:shadowDx="2"
+        android:shadowRadius="5"
+        android:shadowColor="@color/db_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/margin_16"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/imgHeroSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBattle"
+        android:layout_marginTop="@dimen/margin_32"
+        tools:src="@tools:sample/avatars"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imgHeroEnemy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/tvBattle"
+        android:layout_marginTop="@dimen/margin_32"
+        tools:src="@tools:sample/avatars"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvNameSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_name"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgHeroSelect"
+        android:layout_marginTop="@dimen/margin_16"/>
+
+    <TextView
+        android:id="@+id/tvNameEnemy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/imgHeroEnemy"
+        android:layout_marginTop="@dimen/margin_16"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_16"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameSelect"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="@id/guideline3">
+        <ProgressBar
+            android:id="@+id/pbSelect"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="@dimen/life_bar_size"
+            android:layout_height="wrap_content"/>
+        <TextView
+
+            android:id="@+id/tvLifeSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:text="@string/tv_life" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLife"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_16"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameEnemy"
+        app:layout_constraintStart_toStartOf="@id/guideline3"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ProgressBar
+            android:id="@+id/pbEnemy"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="@dimen/life_bar_size"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvLifeEnemy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:text="@string/tv_life" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnFight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_iniciar_batalla"
+        android:layout_marginTop="@dimen/margin_32"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llLife" />
+
+    <TextView
+        android:id="@+id/tvVS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vs"
+        android:textSize="@dimen/text_title"
+        android:textStyle="bold"
+        android:textColor="@color/db_orange"
+        android:shadowDy="2"
+        android:shadowDx="2"
+        android:shadowRadius="5"
+        android:shadowColor="@color/db_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/imgHeroEnemy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBattle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

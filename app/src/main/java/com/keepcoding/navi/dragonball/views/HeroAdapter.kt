@@ -3,25 +3,26 @@ package com.keepcoding.navi.dragonball.views
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.keepcoding.navi.dragonball.databinding.HeroItemBinding
 import com.keepcoding.navi.dragonball.models.Hero
+import com.keepcoding.navi.dragonball.utils.EventCallback
 import com.squareup.picasso.Picasso
 
-class HeroAdapter : RecyclerView.Adapter<HeroAdapter.HeroViewHolder>() {
+class HeroAdapter(private var listener: EventCallback): RecyclerView.Adapter<HeroAdapter.HeroViewHolder>() {
 
     private var items = listOf<Hero>()
 
     inner class HeroViewHolder(val binding: HeroItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(hero: Hero){
+        fun bind(hero: Hero, position: Int){
             binding.tvName.text = hero.name
             binding.lifeBar.progress = hero.actualLife
             binding.lifeNumber.text = hero.actualLife.toString()
             Picasso.get().load(hero.photo).into(binding.imgHero)
-            binding.btnInfo.setOnClickListener { Toast.makeText(binding.root.context, hero.name, Toast.LENGTH_LONG).show() }
-            binding.root.setOnClickListener { Toast.makeText(binding.root.context, hero.id, Toast.LENGTH_LONG).show() }
+            binding.btnInfo.setOnClickListener { listener.onClickInfo(position)}
+            binding.root.setOnClickListener { listener.onClickStartBattle(position) }
         }
+
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +38,7 @@ class HeroAdapter : RecyclerView.Adapter<HeroAdapter.HeroViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position],position)
     }
 
     @SuppressLint("NotifyDataSetChanged")
