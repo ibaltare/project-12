@@ -5,12 +5,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import com.keepcoding.navi.dragonball.databinding.ActivityHomeBinding
 import com.keepcoding.navi.dragonball.utils.EventCallback
+import com.keepcoding.navi.dragonball.utils.RandomBattle
+import com.keepcoding.navi.dragonball.viewModels.HomeViewModel
 
 class HomeActivity : AppCompatActivity(),EventCallback {
     private lateinit var binding: ActivityHomeBinding
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +36,14 @@ class HomeActivity : AppCompatActivity(),EventCallback {
     }
 
     override fun onClickStartBattle(position: Int) {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainerView.id, BattleFragment())
-            .setReorderingAllowed(true)
-            .addToBackStack("_back")
-            .commit()
+        viewModel.heroList?.let {
+            val enemyPosition =  RandomBattle.getRandomHero(it,position)
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentContainerView.id, BattleFragment(position, enemyPosition))
+                .setReorderingAllowed(true)
+                .addToBackStack("_back")
+                .commit()
+        }
     }
 
     override fun onClickInfo(position: Int) {

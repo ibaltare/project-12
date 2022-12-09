@@ -1,6 +1,7 @@
 package com.keepcoding.navi.dragonball.views
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,14 +16,20 @@ class HeroAdapter(private var listener: EventCallback): RecyclerView.Adapter<Her
 
     inner class HeroViewHolder(val binding: HeroItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(hero: Hero, position: Int){
-            binding.tvName.text = hero.name
-            binding.lifeBar.progress = hero.actualLife
-            binding.lifeNumber.text = hero.actualLife.toString()
-            Picasso.get().load(hero.photo).into(binding.imgHero)
-            binding.btnInfo.setOnClickListener { listener.onClickInfo(position)}
-            binding.root.setOnClickListener { listener.onClickStartBattle(position) }
-        }
+            with(binding){
+                tvName.text = hero.name
+                lifeBar.progress = hero.actualLife
+                lifeNumber.text = hero.actualLife.toString()
+                Picasso.get().load(hero.photo).into(imgHero)
+                if (hero.actualLife > 0) {
+                    root.setOnClickListener { listener.onClickStartBattle(position) }
+                }else{
+                    imgHero.setColorFilter(Color.argb(195, 128, 128, 128))
+                }
+                btnInfo.setOnClickListener { listener.onClickInfo(position)}
+            }
 
+        }
     }
 
     override fun getItemCount(): Int {

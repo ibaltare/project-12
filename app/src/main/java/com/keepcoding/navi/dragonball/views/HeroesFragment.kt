@@ -1,6 +1,7 @@
 package com.keepcoding.navi.dragonball.views
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,8 +32,11 @@ class HeroesFragment(private var listener: EventCallback) : Fragment(), EventCal
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.loadLocalHeroes(binding.root.context)
+        if (viewModel.heroList == null){
+            viewModel.downloadHeroes(binding.root.context)
+        }
         setObservers()
-        viewModel.downloadHeroes(view.context)
     }
 
     private fun setObservers() {
@@ -54,7 +58,7 @@ class HeroesFragment(private var listener: EventCallback) : Fragment(), EventCal
     }
 
     private fun createRecycler() {
-        adapter?.updateList(viewModel.heroList)
+        adapter.updateList(viewModel.heroList)
         binding.rvItems.adapter = adapter
         binding.rvItems.layoutManager = LinearLayoutManager(binding.root.context)
     }

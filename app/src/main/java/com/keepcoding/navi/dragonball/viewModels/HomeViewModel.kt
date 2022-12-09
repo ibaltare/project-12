@@ -1,6 +1,7 @@
 package com.keepcoding.navi.dragonball.viewModels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,8 +22,20 @@ class HomeViewModel: ViewModel() {
         MutableLiveData<MainActivityState>()
     }
 
+    fun loadLocalHeroes(context: Context){
+        setValueOnMainThread(MainActivityState.Loading)
+        var json = SharedPreferences.getHeroes(context)
+        json?.let {
+            var heroArray =  Gson().fromJson(it, Array<Hero>::class.java)
+            heroList = heroArray.toList()
+            Log.d("loadLocalHeroes","loadLocalHeroes *******")
+        }
+        setValueOnMainThread(MainActivityState.Success(null))
+    }
+
     fun downloadHeroes(context: Context) {
         setValueOnMainThread(MainActivityState.Loading)
+        Log.d("downloadHeroes","downloadHeroes *******")
         val client = OkHttpClient()
         val url = Constants.URL_HEROES_ALL
         val token = SharedPreferences.getToken(context)

@@ -31,25 +31,29 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgHeroSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/life_bar_size"
+        android:layout_height="@dimen/life_bar_size"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBattle"
         android:layout_marginTop="@dimen/margin_32"
+        app:shapeAppearanceOverlay="@style/roundedSquare"
         tools:src="@tools:sample/avatars"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgHeroEnemy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/life_bar_size"
+        android:layout_height="@dimen/life_bar_size"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/tvBattle"
         android:layout_marginTop="@dimen/margin_32"
+        app:shapeAppearanceOverlay="@style/roundedSquare"
         tools:src="@tools:sample/avatars"
         tools:ignore="ContentDescription" />
 
@@ -88,7 +92,6 @@
             android:layout_width="@dimen/life_bar_size"
             android:layout_height="wrap_content"/>
         <TextView
-
             android:id="@+id/tvLifeSelect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

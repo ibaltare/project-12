@@ -5,6 +5,6 @@ data class Hero(
     val photo: String,
     val name: String,
     val maximumLife: Int,
-    val actualLife: Int,
-    val selected: Int
+    var actualLife: Int,
+    var selected: Int
     )
