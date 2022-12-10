@@ -1,21 +1,15 @@
 package com.keepcoding.navi.dragonball.views
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.google.gson.Gson
-import com.keepcoding.navi.dragonball.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.keepcoding.navi.dragonball.databinding.FragmentBattleBinding
-import com.keepcoding.navi.dragonball.utils.RandomBattle
-import com.keepcoding.navi.dragonball.utils.SharedPreferences
 import com.keepcoding.navi.dragonball.viewModels.HomeViewModel
 import com.squareup.picasso.Picasso
-import java.text.FieldPosition
 
 class BattleFragment(private val heroPosition: Int, private val enemyPosition: Int) : Fragment() {
 
@@ -68,46 +62,42 @@ class BattleFragment(private val heroPosition: Int, private val enemyPosition: I
     private fun setListeners(){
         binding.btnFight.setOnClickListener {
             fight()
+            compareLife()
         }
     }
 
     private fun fight(){
-        val hurt = RandomBattle.getHurt()
-        val character = RandomBattle.getCharacter()
+        viewModel.startFight(enemyPosition,heroPosition)
         viewModel.heroList?.let {
-            if (character == 1){
-                if (it[enemyPosition].actualLife - hurt > 0){
-                    it[enemyPosition].actualLife -= hurt
-                    binding.tvLifeEnemy.text = it[enemyPosition].actualLife.toString()
-                    binding.pbEnemy.progress = it[enemyPosition].actualLife
-                } else {
-                    it[enemyPosition].actualLife = 0
-                    parentFragmentManager.popBackStack()
-                }
-            } else {
-                if (it[heroPosition].actualLife - hurt > 0){
-                    it[heroPosition].actualLife -= hurt
-                    binding.tvLifeSelect.text = it[heroPosition].actualLife.toString()
-                    binding.pbSelect.progress = it[heroPosition].actualLife
-                } else {
-                    it[heroPosition].actualLife = 0
-                    parentFragmentManager.popBackStack()
-                }
+            binding.tvLifeEnemy.text = it[enemyPosition].actualLife.toString()
+            binding.pbEnemy.progress = it[enemyPosition].actualLife
+            binding.tvLifeSelect.text = it[heroPosition].actualLife.toString()
+            binding.pbSelect.progress = it[heroPosition].actualLife
+        }
+    }
+
+    private fun compareLife(){
+        viewModel.heroList?.let {
+            if (it[heroPosition].actualLife == 0){
+                showWinner(it[enemyPosition].name)
+            }else if (it[enemyPosition].actualLife == 0) {
+                showWinner(it[heroPosition].name)
             }
         }
     }
 
-    private fun saveBattle(){
-        val json = Gson().toJson(viewModel.heroList)
-        SharedPreferences.saveHeroes(json,binding.root.context)
+    private fun showWinner(winner: String){
+        MaterialAlertDialogBuilder(binding.root.context)
+            .setTitle("Ganador: $winner")
+            .setPositiveButton("Aceptar") { _, _ ->
+                parentFragmentManager.popBackStack()
+            }
+            .show()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("onStop", viewModel.heroList?.get(heroPosition)?.actualLife.toString())
-        Log.d("onStop", viewModel.heroList?.get(enemyPosition)?.actualLife.toString())
-        Log.d("onStop POS", "H: $heroPosition E: $enemyPosition")
-        saveBattle()
+        viewModel.saveHeroes(binding.root.context)
     }
 
 }

@@ -1,7 +1,6 @@
 package com.keepcoding.navi.dragonball.views
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.keepcoding.navi.dragonball.databinding.FragmentHeroesBinding
 import com.keepcoding.navi.dragonball.utils.EventCallback
 import com.keepcoding.navi.dragonball.utils.MainActivityState
@@ -32,11 +32,23 @@ class HeroesFragment(private var listener: EventCallback) : Fragment(), EventCal
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setObservers()
+        setListeners()
         viewModel.loadLocalHeroes(binding.root.context)
         if (viewModel.heroList == null){
             viewModel.downloadHeroes(binding.root.context)
         }
-        setObservers()
+        checkWinner()
+    }
+
+    private fun checkWinner(){
+        if (viewModel.endGame()){
+            MaterialAlertDialogBuilder(binding.root.context)
+                .setTitle("Juego Terminado")
+                .setMessage("Ganador: ${viewModel.getWinner()?.name}")
+                .setPositiveButton("Aceptar",null)
+                .show()
+        }
     }
 
     private fun setObservers() {
@@ -57,6 +69,20 @@ class HeroesFragment(private var listener: EventCallback) : Fragment(), EventCal
         }
     }
 
+    private fun setListeners(){
+        binding.fabReset.setOnClickListener {
+            MaterialAlertDialogBuilder(binding.root.context)
+                .setTitle("Nuevo Juego")
+                .setMessage("¿Desea reiniciar el juego?")
+                .setPositiveButton("Aceptar") { _, _ ->
+                    viewModel.resetGame()
+                    viewModel.saveHeroes(binding.root.context)
+                    createRecycler()
+                }
+                .setNegativeButton("Cancelar",null)
+                .show()
+        }
+    }
     private fun createRecycler() {
         adapter.updateList(viewModel.heroList)
         binding.rvItems.adapter = adapter

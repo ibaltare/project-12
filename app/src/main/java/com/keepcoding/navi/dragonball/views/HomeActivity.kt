@@ -2,11 +2,10 @@ package com.keepcoding.navi.dragonball.views
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.keepcoding.navi.dragonball.databinding.ActivityHomeBinding
 import com.keepcoding.navi.dragonball.utils.EventCallback
 import com.keepcoding.navi.dragonball.utils.RandomBattle
@@ -38,15 +37,23 @@ class HomeActivity : AppCompatActivity(),EventCallback {
     override fun onClickStartBattle(position: Int) {
         viewModel.heroList?.let {
             val enemyPosition =  RandomBattle.getRandomHero(it,position)
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentContainerView.id, BattleFragment(position, enemyPosition))
-                .setReorderingAllowed(true)
-                .addToBackStack("_back")
-                .commit()
+            if (enemyPosition >= 0){
+                supportFragmentManager.beginTransaction()
+                    .replace(binding.fragmentContainerView.id, BattleFragment(position, enemyPosition))
+                    .setReorderingAllowed(true)
+                    .addToBackStack("_back")
+                    .commit()
+            }
         }
     }
 
     override fun onClickInfo(position: Int) {
-        Log.d("Info", position.toString())
+        viewModel.heroList?.let {
+            MaterialAlertDialogBuilder(binding.root.context)
+                .setTitle(it[position].name)
+                .setMessage("Seleccionado: ${it[position].selected}")
+                .setPositiveButton("Aceptar",null)
+                .show()
+        }
     }
 }

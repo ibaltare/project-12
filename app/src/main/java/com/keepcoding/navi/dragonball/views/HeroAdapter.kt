@@ -15,22 +15,35 @@ class HeroAdapter(private var listener: EventCallback): RecyclerView.Adapter<Her
     private var items = listOf<Hero>()
 
     inner class HeroViewHolder(val binding: HeroItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(hero: Hero, position: Int){
             with(binding){
                 tvName.text = hero.name
                 lifeBar.progress = hero.actualLife
                 lifeNumber.text = hero.actualLife.toString()
                 Picasso.get().load(hero.photo).into(imgHero)
-                if (hero.actualLife > 0) {
-                    root.setOnClickListener { listener.onClickStartBattle(position) }
-                }else{
-                    imgHero.setColorFilter(Color.argb(195, 128, 128, 128))
-                }
                 btnInfo.setOnClickListener { listener.onClickInfo(position)}
             }
-
         }
+
+        fun setHeroEnabled(hero:Hero, position: Int){
+            binding.apply {
+                if (hero.actualLife > 0) {
+                    root.setOnClickListener {
+                        listener.onClickStartBattle(position)
+                    }
+                }else{
+                    imgHero.setColorFilter(Color.argb(210, 128, 128, 128))
+                    tvName.setTextColor(Color.GRAY)
+                }
+            }
+        }
+
     }
+
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getItemViewType(position: Int) = position
 
     override fun getItemCount(): Int {
         return items.size
@@ -46,6 +59,7 @@ class HeroAdapter(private var listener: EventCallback): RecyclerView.Adapter<Her
 
     override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
         holder.bind(items[position],position)
+        holder.setHeroEnabled(items[position],position)
     }
 
     @SuppressLint("NotifyDataSetChanged")
